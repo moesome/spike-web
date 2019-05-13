@@ -8,8 +8,9 @@
                     :style="{ height: '100%', borderRight: 0 }"
             >
                 <a-sub-menu key="index">
-                    <span slot="title"><a-icon type="home" /><span>首页</span></span>
-                    <a-menu-item key="1">统计</a-menu-item>
+                    <span slot="title"><a-icon type="home" /><span>项目</span></span>
+                    <a-menu-item key="1"><router-link to="/item/index">总览</router-link></a-menu-item>
+                    <a-menu-item key="99"><router-link to="/item/0">临时</router-link></a-menu-item>
                 </a-sub-menu>
                 <a-sub-menu key="production">
                     <span slot="title"><a-icon type="shopping-cart" /><span>商品管理</span></span>
@@ -39,12 +40,13 @@
             </a-menu>
         </a-layout-sider>
         <a-layout style="padding: 0 10px 10px">
-            <a-layout-header class="header" style="background-color:rgba(42,72,255,0.88)">
+            <a-layout-header class="header" style="background-color:rgb(145,145,145)">
                 <div>
                     <a-row>
                         <a-col :offset="20" :span="4">
                             <a-button v-show="!isLogin" type="dashed" ghost style="margin-right: 30px"><router-link to="/user/login">登录</router-link></a-button>
                             <a-button v-show="!isLogin" type="dashed" ghost><router-link to="/user/register">注册</router-link></a-button>
+                            <span v-show="isLogin" id="nickname">{{this.$store.state.user===null?"":this.$store.state.user.nickname}}<a href="#" style="margin-left: 20px;color:white">退出</a></span>
                         </a-col>
                     </a-row>
                 </div>
@@ -81,6 +83,18 @@
         },
         mounted(){
             this.updateBreadcrumb();
+            let me = this;
+            // 用 cookies 向服务器拉取用户数据存到 vuex 中
+            this.$axios.get("http://api.moesome.com/check",{withCredentials: true})
+                .then(function resolve(response) {
+                    if (response.data.code === 0){
+                        console.log(response)
+                        me.$store.commit("login",response.data.user);
+                    }
+                })
+                .catch(function () {
+                    // 不处理
+                });
         },
         updated() {
             this.updateBreadcrumb();
@@ -96,13 +110,16 @@
                 let second = this.$route.fullPath.split("/")[2];
                 switch (first) {
                     case "item":
-                        first = "商品管理";
+                        first = "项目";
                         break;
                     case "user":
                         first = "用户";
                         break;
                 }
                 switch (second) {
+                    case "index":
+                        second = "总览";
+                        break;
                     case "login":
                         second = "登录";
                         break;
@@ -119,5 +136,7 @@
     #app{
         min-height:100%;
     }
-
+    #nickname{
+        font-size: 20px;
+    }
 </style>

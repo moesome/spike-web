@@ -8,9 +8,7 @@ module.exports = {
     },
     devServer: {
         allowedHosts: [
-
-            'admin.moesome.com',
-
+            'moesome.com',
         ],
     }
 }

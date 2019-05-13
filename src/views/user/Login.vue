@@ -3,6 +3,7 @@
             :form="thisForm"
             @submit="handleSubmit"
     >
+
         <a-form-item
                 label="用户名"
                 :label-col="{ span: 8 }"
@@ -30,6 +31,7 @@
                     html-type="submit"
                     size = "large"
                     style="width: 30%"
+                    :loading="btnLoading"
             >
                 登录
             </a-button>
@@ -52,31 +54,47 @@
     Vue.use(Form);
     import { Input } from 'ant-design-vue';
     Vue.use(Input);
+    import { Modal } from 'ant-design-vue';
+    Vue.use(Modal);
     export default {
         name: "Login",
         data () {
             return {
                 thisForm: this.$form.createForm(this),
+
+                btnLoading: false
             };
         },
         methods: {
+            showMsg(msg){
+                Modal.error(({
+                    title: '发生错误',
+                    content: msg,
+                }));
+            },
             handleSubmit(e) {
                 e.preventDefault();
                 this.thisForm.validateFields((err, values) => {
                     if (!err) {
+                        this.btnLoading = true;
                         let me = this;
-                        this.$axios.post('http://localhost:8080/login', {
+                        this.$axios.post('http://api.moesome.com/login', {
                             "username" : values.username,
                             "password" : me.$md5(values.password),
-                        })
+                            },{withCredentials: true})
                             .then(function resolve(response) {
-                                if (response.data.status === 200){
-                                    me.$router.push("/temp");
-                                    me.$store.commit("login");
+                                me.btnLoading = false;
+                                if (response.data.code === 0){
+                                    me.$router.push("/item/index");
+                                    me.$store.commit("login",response.data.user);
+                                }else{
+                                    me.btnLoading = false;
+                                    me.showMsg(response.data.message);
                                 }
                             })
-                            .catch(function (error) {
-                                console.log(error);
+                            .catch(function () {
+                                me.btnLoading = false;
+                                me.showMsg("未知错误")
                             });
                     }
                 });
