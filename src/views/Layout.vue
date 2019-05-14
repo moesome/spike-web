@@ -7,11 +7,9 @@
                     :defaultOpenKeys="['']"
                     :style="{ height: '100%', borderRight: 0 }"
             >
-                <a-sub-menu key="index">
-                    <span slot="title"><a-icon type="home" /><span>项目</span></span>
-                    <a-menu-item key="1"><router-link to="/item/index">总览</router-link></a-menu-item>
-                    <a-menu-item key="99"><router-link to="/item/0">临时</router-link></a-menu-item>
-                </a-sub-menu>
+                <a-menu-item key="index">
+                    <router-link to="/spike/index"><a-icon type="shopping-cart"/>秒杀</router-link>
+                </a-menu-item>
                 <a-sub-menu key="production">
                     <span slot="title"><a-icon type="shopping-cart" /><span>商品管理</span></span>
                     <a-menu-item key="2"><router-link to="/item/category">分类管理</router-link></a-menu-item>
@@ -83,13 +81,12 @@
         },
         mounted(){
             this.updateBreadcrumb();
-            let me = this;
             // 用 cookies 向服务器拉取用户数据存到 vuex 中
             this.$axios.get("http://api.moesome.com/check",{withCredentials: true})
-                .then(function resolve(response) {
+                .then((response) => {
                     if (response.data.code === 0){
                         console.log(response)
-                        me.$store.commit("login",response.data.user);
+                        this.$store.commit("login",response.data.user);
                     }
                 })
                 .catch(function () {
@@ -109,8 +106,8 @@
                 let first = this.$route.fullPath.split("/")[1];
                 let second = this.$route.fullPath.split("/")[2];
                 switch (first) {
-                    case "item":
-                        first = "项目";
+                    case "spike":
+                        first = "秒杀";
                         break;
                     case "user":
                         first = "用户";

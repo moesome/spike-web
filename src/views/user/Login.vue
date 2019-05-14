@@ -77,24 +77,23 @@
                 this.thisForm.validateFields((err, values) => {
                     if (!err) {
                         this.btnLoading = true;
-                        let me = this;
                         this.$axios.post('http://api.moesome.com/login', {
                             "username" : values.username,
-                            "password" : me.$md5(values.password),
+                            "password" : this.$md5(values.password),
                             },{withCredentials: true})
-                            .then(function resolve(response) {
-                                me.btnLoading = false;
+                            .then((response) => {
+                                this.btnLoading = false;
                                 if (response.data.code === 0){
-                                    me.$router.push("/item/index");
-                                    me.$store.commit("login",response.data.user);
+                                    this.$router.push("/spike/index");
+                                    this.$store.commit("login",response.data.user);
                                 }else{
-                                    me.btnLoading = false;
-                                    me.showMsg(response.data.message);
+                                    this.btnLoading = false;
+                                    this.showMsg(response.data.message);
                                 }
                             })
                             .catch(function () {
-                                me.btnLoading = false;
-                                me.showMsg("未知错误")
+                                this.btnLoading = false;
+                                this.showMsg("未知错误")
                             });
                     }
                 });

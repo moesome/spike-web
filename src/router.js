@@ -18,14 +18,14 @@ export default new Router({
           component: () => import(/* webpackChunkName: "user" */ './views/user/Login.vue')
         },
         {
-          path: '/item/index',
+          path: '/spike/index',
           name: 'index',
-          component: () => import(/* webpackChunkName: "index" */ './views/item/Index.vue')
+          component: () => import(/* webpackChunkName: "index" */ './views/spike/Index.vue')
         },
         {
-          path: '/item/:itemId',
+          path: '/spike/:itemId',
           name: 'item',
-          component: () => import(/* webpackChunkName: "index" */ './views/item/Item.vue')
+          component: () => import(/* webpackChunkName: "index" */ './views/spike/Item.vue')
         },
       ]
     },
