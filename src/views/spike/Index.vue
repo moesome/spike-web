@@ -6,7 +6,7 @@
             :pagination="pagination"
             @change="handleTableChange"
     >
-        <a-button v-show="record.remain !== '已结束'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="spike(record)">秒杀</a-button>
+        <a-button v-show="(record.remain !== '已结束')" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="spike(record)">秒杀</a-button>
     </a-table>
 
 </template>
@@ -39,18 +39,17 @@
         },
         methods:{
             spike(record){
-                console.log(record)
-                this.$axios.get("http://api.moesome.com/check",{withCredentials: true})
-                    .then((response) => {
-                        if (response.data.code === 0){
+                if (this.$store.state.isLogin === false) {
+                    this.$router.push("/user/login");
+                }else{
+                    this.$axios.post("http://api.moesome.com/spike_order/"+record.id,{},{withCredentials: true})
+                        .then((response) => {
                             console.log(response)
-                            this.$store.commit("login",response.data.user);
-                        }
-                    })
-                    .catch(function () {
-                        // 不处理
-                    });
-
+                        })
+                        .catch(function (response) {
+                            console.log(response)
+                        });
+                }
             },
 
             handleTableChange (pagination, filters, sorter) {
@@ -78,10 +77,11 @@
                 }
                 this.$axios.get('http://api.moesome.com/spike/index/'+page+"?order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
+                    console.log(response)
                     const pagination = { ...this.pagination };
                     pagination.total = response.data.count;
                     this.loading = false;
-                    let list = response.data.spikeList;
+                    let list = response.data.object;
                     for (let i = 0;i < list.length;i++) {
                         let item = list[i];
                         item.key = item.id;

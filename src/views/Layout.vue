@@ -44,7 +44,7 @@
                         <a-col :offset="20" :span="4">
                             <a-button v-show="!isLogin" type="dashed" ghost style="margin-right: 30px"><router-link to="/user/login">登录</router-link></a-button>
                             <a-button v-show="!isLogin" type="dashed" ghost><router-link to="/user/register">注册</router-link></a-button>
-                            <span v-show="isLogin" id="nickname">{{this.$store.state.user===null?"":this.$store.state.user.nickname}}<a href="#" style="margin-left: 20px;color:white">退出</a></span>
+                            <span v-show="isLogin" id="nickname">{{(this.$store.state.user===null)?"":this.$store.state.user.nickname}}<a href="#" style="margin-left: 20px;color:white">退出</a></span>
                         </a-col>
                     </a-row>
                 </div>
@@ -86,7 +86,7 @@
                 .then((response) => {
                     if (response.data.code === 0){
                         console.log(response)
-                        this.$store.commit("login",response.data.user);
+                        this.$store.commit("login",response.data.object);
                     }
                 })
                 .catch(function () {
