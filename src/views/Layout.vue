@@ -10,31 +10,31 @@
                 <a-menu-item key="index">
                     <router-link to="/spike/index"><a-icon type="shopping-cart"/>秒杀</router-link>
                 </a-menu-item>
-                <a-sub-menu key="production">
-                    <span slot="title"><a-icon type="shopping-cart" /><span>商品管理</span></span>
-                    <a-menu-item key="2"><router-link to="/item/category">分类管理</router-link></a-menu-item>
-                    <a-menu-item key="3"><router-link to="/item/brand">品牌管理</router-link></a-menu-item>
-                    <a-menu-item key="4">商品列表</a-menu-item>
-                    <a-menu-item key="5">规格参数</a-menu-item>
-                </a-sub-menu>
-                <a-sub-menu key="vip">
-                    <span slot="title"><a-icon type="crown" /><span>会员管理</span></span>
-                    <a-menu-item key="6">会员统计</a-menu-item>
-                    <a-menu-item key="7">会员管理</a-menu-item>
-                </a-sub-menu>
-                <a-sub-menu key="sold">
-                    <span slot="title"><a-icon type="dollar" /><span>销售管理</span></span>
-                    <a-menu-item key="8">交易统计</a-menu-item>
-                    <a-menu-item key="9">订单管理</a-menu-item>
-                    <a-menu-item key="10">物流管理</a-menu-item>
-                    <a-menu-item key="11">促销管理</a-menu-item>
-                </a-sub-menu>
-                <a-sub-menu key="permission">
-                    <span slot="title"><a-icon type="setting" /><span>权限管理</span></span>
-                    <a-menu-item key="12">权限管理</a-menu-item>
-                    <a-menu-item key="13">角色管理</a-menu-item>
-                    <a-menu-item key="14">人员管理</a-menu-item>
-                </a-sub-menu>
+                <!--<a-sub-menu key="production">-->
+                    <!--<span slot="title"><a-icon type="shopping-cart" /><span>商品管理</span></span>-->
+                    <!--<a-menu-item key="2"><router-link to="/item/category">分类管理</router-link></a-menu-item>-->
+                    <!--<a-menu-item key="3"><router-link to="/item/brand">品牌管理</router-link></a-menu-item>-->
+                    <!--<a-menu-item key="4">商品列表</a-menu-item>-->
+                    <!--<a-menu-item key="5">规格参数</a-menu-item>-->
+                <!--</a-sub-menu>-->
+                <!--<a-sub-menu key="vip">-->
+                    <!--<span slot="title"><a-icon type="crown" /><span>会员管理</span></span>-->
+                    <!--<a-menu-item key="6">会员统计</a-menu-item>-->
+                    <!--<a-menu-item key="7">会员管理</a-menu-item>-->
+                <!--</a-sub-menu>-->
+                <!--<a-sub-menu key="sold">-->
+                    <!--<span slot="title"><a-icon type="dollar" /><span>销售管理</span></span>-->
+                    <!--<a-menu-item key="8">交易统计</a-menu-item>-->
+                    <!--<a-menu-item key="9">订单管理</a-menu-item>-->
+                    <!--<a-menu-item key="10">物流管理</a-menu-item>-->
+                    <!--<a-menu-item key="11">促销管理</a-menu-item>-->
+                <!--</a-sub-menu>-->
+                <!--<a-sub-menu key="permission">-->
+                    <!--<span slot="title"><a-icon type="setting" /><span>权限管理</span></span>-->
+                    <!--<a-menu-item key="12">权限管理</a-menu-item>-->
+                    <!--<a-menu-item key="13">角色管理</a-menu-item>-->
+                    <!--<a-menu-item key="14">人员管理</a-menu-item>-->
+                <!--</a-sub-menu>-->
             </a-menu>
         </a-layout-sider>
         <a-layout style="padding: 0 10px 10px">
@@ -44,7 +44,7 @@
                         <a-col :offset="20" :span="4">
                             <a-button v-show="!isLogin" type="dashed" ghost style="margin-right: 30px"><router-link to="/user/login">登录</router-link></a-button>
                             <a-button v-show="!isLogin" type="dashed" ghost><router-link to="/user/register">注册</router-link></a-button>
-                            <span v-show="isLogin" id="nickname">{{(this.$store.state.user===null)?"":this.$store.state.user.nickname}}<a href="#" style="margin-left: 20px;color:white">退出</a></span>
+                            <span v-show="isLogin" id="nickname">{{(this.$store.state.user===null)?"":this.$store.state.user.nickname}}<a href="#" @click="exit" style="margin-left: 20px;color:white">退出</a></span>
                         </a-col>
                     </a-row>
                 </div>
@@ -69,6 +69,10 @@
     Vue.use(Menu);
     import { Button } from 'ant-design-vue';
     Vue.use(Button);
+    import { Modal } from 'ant-design-vue';
+    Vue.use(Modal);
+
+    Vue.prototype.$modal = Modal
 
     export default {
         name:"layout",
@@ -85,6 +89,7 @@
             this.$axios.get("http://api.moesome.com/check",{withCredentials: true})
                 .then((response) => {
                     if (response.data.code === 0){
+                        console.log("login")
                         console.log(response)
                         this.$store.commit("login",response.data.object);
                     }
@@ -123,6 +128,23 @@
                 }
                 this.first = first;
                 this.second = second;
+            },
+            exit(){
+                this.$axios.post("http://api.moesome.com/logout",{},{withCredentials: true})
+                    .then((response) => {
+                        if (response.data.code === 0){
+                            this.$store.commit("logout");
+                        }
+                    })
+                    .catch(function () {
+                        // 不处理
+                    });
+            },
+            showWrongMsg(msg){
+                this.$modal.error(({
+                    title: '发生错误',
+                    content: msg,
+                }));
             },
         }
     }

@@ -6,7 +6,7 @@
             :pagination="pagination"
             @change="handleTableChange"
     >
-        <a-button v-show="(record.remain !== '已结束')" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="spike(record)">秒杀</a-button>
+        <a-button :loading="record.loading" v-if="(record.remain !== '已结束') && (record.stock > 0)"  type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="spike(record)">秒杀</a-button>
     </a-table>
 
 </template>
@@ -17,11 +17,11 @@
     Vue.use(Table);
     const columns = [
         { title: 'ID', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
-        { title: '名称', dataIndex: 'name', key: 'name' },
-        { title: '描述', dataIndex: 'detail', key: 'detail' },
-        { title: '余量', dataIndex: 'stock', key: 'stock' },
-        { title: '剩余时间', dataIndex: 'remain', key: 'remain' },
-        { title: '秒杀', dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
+        { title: '名称',width: '10%', dataIndex: 'name', key: 'name' },
+        { title: '描述', width: '40%',dataIndex: 'detail', key: 'detail' },
+        { title: '余量', width: '10%',dataIndex: 'stock', key: 'stock' },
+        { title: '剩余时间',width: '20%', dataIndex: 'remain', key: 'remain' },
+        { title: '秒杀', width: '10%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
     ];
 
     export default {
@@ -42,12 +42,20 @@
                 if (this.$store.state.isLogin === false) {
                     this.$router.push("/user/login");
                 }else{
+                    record.loading = true;
                     this.$axios.post("http://api.moesome.com/spike_order/"+record.id,{},{withCredentials: true})
                         .then((response) => {
-                            console.log(response)
+                            record.loading = false;
+                            let data = response.data;
+                            if (data.code === 0){
+                                this.showSuccessMsg("秒杀成功")
+                                record.stock--;
+                            }else{
+                                this.showWrongMsg(data.code===-652?"已经秒杀过了":data.message)
+                            }
                         })
-                        .catch(function (response) {
-                            console.log(response)
+                        .catch(function () {
+                            record.loading = false;
                         });
                 }
             },
@@ -77,9 +85,11 @@
                 }
                 this.$axios.get('http://api.moesome.com/spike/index/'+page+"?order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
+                    console.log("index:")
                     console.log(response)
                     const pagination = { ...this.pagination };
                     pagination.total = response.data.count;
+                    let now = response.data.now;
                     this.loading = false;
                     let list = response.data.object;
                     for (let i = 0;i < list.length;i++) {
@@ -88,22 +98,41 @@
                         if (item.stock === -1){
                             item.stock = "无限";
                         }
-                        let now = Date.now();
+                        item.now = this.$dateFormat(now);
                         item.startAt = this.$dateFormat(item.startAt);
                         item.endAt = this.$dateFormat(item.endAt);
-                        let remainStamp = item.endAt - now;
+                        let remainStamp = item.endAt - item.now;
                         if (remainStamp < 0){
                             item.remain = "已结束";
                         }else{
-                            item.remain = this.$convertTimestampToString(remainStamp);
+                            let beforeStamp = item.startAt - item.now;
+                            if (beforeStamp > 0){
+                                item.remain = "距离开始还有："+this.$convertTimestampToString(beforeStamp);
+                            }else{
+                                item.remain = this.$convertTimestampToString(remainStamp);
+                            }
+
                         }
+                        item.loading = false;
                     }
                     this.data = list;
                     this.pagination = pagination;
                 }).catch(function (e) {
                     console.log(e)
                 });
-            }
+            },
+            showWrongMsg(msg){
+                this.$modal.error(({
+                    title: '发生错误',
+                    content: msg,
+                }));
+            },
+            showSuccessMsg(msg){
+                this.$modal.success(({
+                    title: '成功',
+                    content: msg,
+                }));
+            },
         }
     }
 </script>

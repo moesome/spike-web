@@ -54,8 +54,6 @@
     Vue.use(Form);
     import { Input } from 'ant-design-vue';
     Vue.use(Input);
-    import { Modal } from 'ant-design-vue';
-    Vue.use(Modal);
     export default {
         name: "Login",
         data () {
@@ -67,7 +65,7 @@
         },
         methods: {
             showMsg(msg){
-                Modal.error(({
+                this.$modal.error(({
                     title: '发生错误',
                     content: msg,
                 }));
@@ -83,11 +81,12 @@
                             },{withCredentials: true})
                             .then((response) => {
                                 this.btnLoading = false;
+                                console.log("login success:")
+                                console.log(response)
                                 if (response.data.code === 0){
                                     this.$router.push("/spike/index");
-                                    this.$store.commit("login",response.data.user);
+                                    this.$store.commit("login",response.data.object);
                                 }else{
-                                    this.btnLoading = false;
                                     this.showMsg(response.data.message);
                                 }
                             })
