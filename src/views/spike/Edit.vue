@@ -89,7 +89,6 @@
         },
         methods: {
             fetchData () {
-                console.log(this.thisForm.setFieldsValue)
                 // replace getPost with your data fetching util / API wrapper
                 this.$axios.get('http://api.moesome.com/spikes/'+this.$route.params.id,{withCredentials: true})
                     .then((response) => {
@@ -135,7 +134,7 @@
                                 console.log("login success:");
                                 console.log(response);
                                 if (response.data.code === 0){
-                                    this.$router.push({name:"manage"});
+                                    this.$router.push({name:"spikes.manage"});
                                 }else{
                                     this.showMsg(response.data.message);
                                 }

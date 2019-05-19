@@ -105,10 +105,8 @@
                         },{withCredentials: true})
                             .then((response) => {
                                 this.btnLoading = false;
-                                console.log("login success:");
-                                console.log(response);
                                 if (response.data.code === 0){
-                                    this.$router.push({name:"manage"});
+                                    this.$router.push({name:"spikes.manage"});
                                 }else{
                                     this.showMsg(response.data.message);
                                 }

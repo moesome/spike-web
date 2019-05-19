@@ -18,34 +18,44 @@ export default new Router({
           component: () => import(/* webpackChunkName: "user" */ './views/user/Login.vue')
         },
         {
-          path: '/users/register',
-          name: 'register',
-          component: () => import(/* webpackChunkName: "user" */ './views/user/Register.vue')
+          path: '/users/create',
+          name: 'users.create',
+          component: () => import(/* webpackChunkName: "user" */ './views/user/Create.vue')
+        },
+        {
+          path: '/users/:id/edit',
+          name: 'users.edit',
+          component: () => import(/* webpackChunkName: "user" */ './views/user/Edit.vue')
         },
         {
           path: '/spikes',
           name: 'spikes',
-          component: () => import(/* webpackChunkName: "index" */ './views/spike/Index.vue')
+          component: () => import(/* webpackChunkName: "spike" */ './views/spike/Index.vue')
         },
         {
           path: '/orders',
           name: 'orders',
-          component: () => import(/* webpackChunkName: "index" */ './views/order/Index.vue')
+          component: () => import(/* webpackChunkName: "order" */ './views/order/Index.vue')
         },
         {
           path: '/spikes/manage',
-          name: 'manage',
-          component: () => import(/* webpackChunkName: "index" */ './views/spike/Manage.vue')
+          name: 'spikes.manage',
+          component: () => import(/* webpackChunkName: "spike" */ './views/spike/Manage.vue')
         },
         {
           path: '/spikes/create',
-          name: 'create',
+          name: 'spikes.create',
           component: () => import(/* webpackChunkName: "spike" */ './views/spike/Create.vue')
         },
         {
           path: '/spikes/:id/edit',
-          name: 'edit',
+          name: 'spikes.edit',
           component: () => import(/* webpackChunkName: "spike" */ './views/spike/Edit.vue')
+        },
+        {
+          path: '/gift',
+          name: 'gift',
+          component: () => import(/* webpackChunkName: "spike" */ './views/gift/Gift.vue')
         },
       ]
     },

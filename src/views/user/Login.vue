@@ -38,9 +38,9 @@
 
             <a-button
                     type="primary"
-                    html-type="submit"
                     style="margin-left: 40px;width: 30%"
                     size = "large"
+                    @click="register"
             >
                 注册
             </a-button>
@@ -57,17 +57,21 @@
                 btnLoading: false
             };
         },
+
+        mounted(){
+            if (this.$store.state.user !== null) {
+                this.$router.push({name:"spikes"});
+            }
+        },
         methods: {
+            register(){
+                this.$router.push({name:"users.create"});
+            },
             showMsg(msg){
                 this.$modal.error(({
                     title: '发生错误',
                     content: msg,
                 }));
-            },
-            mounted(){
-                if (this.$store.state.user !== null) {
-                    this.$router.push({name:"spikes"});
-                }
             },
             handleSubmit(e) {
                 e.preventDefault();

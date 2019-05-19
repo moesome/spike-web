@@ -36,13 +36,14 @@
           'password',
           {
             rules: [{
-              required: true, message: '请输入密码!',
+               message: '请输入密码!',
             }, {
               validator: validateToNextPassword,
             }],
           }
         ]"
                     type="password"
+                    placeholder="不修改密码则不填"
             />
         </a-form-item>
         <a-form-item
@@ -55,7 +56,7 @@
           'confirm',
           {
             rules: [{
-              required: true, message: '请再次输入密码!',
+              message: '请再次输入密码!',
             }, {
               validator: compareToFirstPassword,
             }],
@@ -63,6 +64,7 @@
         ]"
                     type="password"
                     @blur="handleConfirmBlur"
+                    placeholder="不修改密码则不填"
             />
         </a-form-item>
         <a-form-item
@@ -88,8 +90,13 @@
                 :wrapper-col="{ span: 8 }"
         >
             <a-input
-                    v-decorator="['phone',{rules: [{ required: true, message: '请输入电话!' }]}]"
+                    v-decorator="['phone',
+                                    {
+                                        rules: [{validator: phoneValidator},{ required: true, message: '请输入电话!'
+                                    }]
+                                 }]"
                     placeholder="用于接收战果，务必填写正确"
+
             />
         </a-form-item>
 
@@ -113,7 +120,7 @@
 
 <script>
     export default {
-        name: "Register.vue",
+        name: "Edit",
         data () {
             return {
                 thisForm: this.$form.createForm(this),
@@ -121,34 +128,65 @@
                 confirmDirty:null,
             };
         },
-        mounted(){
-            if (this.$store.state.user !== null) {
-                this.$router.push({name:"spikes"});
-            }
+        created () {
+            // 组件创建完后获取数据，
+            // 此时 data 已经被 observed 了
+            this.fetchData()
         },
         methods: {
+            fetchData () {
+                // replace getPost with your data fetching util / API wrapper
+                this.$axios.get('http://api.moesome.com/users/'+this.$route.params.id,{withCredentials: true})
+                    .then((response) => {
+                        if (response.data.code === 0){
+                            let data = response.data.object;
+                            console.log(data)
+                            this.thisForm.setFieldsValue({
+                                username: data.username,
+                                nickname: data.nickname,
+                                email: data.email,
+                                phone: data.phone,
+                            });
+                        }else{
+                            this.showMsg(response.data.message);
+                            this.$router.push({name:"spikes"});
+                        }
+                    })
+                    .catch(() => {
+                        this.btnLoading = false;
+                        this.showMsg("未知错误")
+                    });
+            },
             showMsg(msg){
                 this.$modal.error(({
                     title: '发生错误',
                     content: msg,
                 }));
             },
+            phoneValidator  (rule, value, callback) {
+                if (value.length !== 11) {
+                    callback("电话长度必须为 11");
+                } else {
+                    callback();
+                }
+            },
             handleSubmit(e) {
                 e.preventDefault();
                 this.thisForm.validateFields((err, values) => {
+                    if (values.phone.length !== 11){
+                        this.thisForm
+                    }
                     if (!err) {
                         this.btnLoading = true;
-                        this.$axios.post('http://api.moesome.com/users', {
+                        this.$axios.patch('http://api.moesome.com/users/'+this.$store.state.user.id, {
                             "username" : values.username,
                             "nickname" : values.nickname,
-                            "password" : this.$md5(values.password),
+                            "password" : ((values.password!=undefined)&&(values.password!=""))?this.$md5(values.password):"",
                             "email" : values.email,
                             "phone" : values.phone,
                         },{withCredentials: true})
                             .then((response) => {
                                 this.btnLoading = false;
-                                console.log("login success:")
-                                console.log(response)
                                 if (response.data.code === 0){
                                     this.$router.push({name:"spikes"});
                                     this.$store.commit("login",response.data.object);

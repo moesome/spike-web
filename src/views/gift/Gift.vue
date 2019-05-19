@@ -1,6 +1,5 @@
 <template>
     <div>
-        <router-link :to="{ name: 'spikes.create'}"><a-button type="primary" icon="plus" style="margin-bottom: 10px"></a-button></router-link>
         <a-table
                 :columns="columns"
                 :dataSource="data"
@@ -8,25 +7,22 @@
                 :pagination="pagination"
                 @change="handleTableChange"
         >
-            <a-button :loading="record.loading"  type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="modify(record)">修改</a-button>
+            <a-button :loading="record.loading"  type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="modify(record)">发货</a-button>
         </a-table>
     </div>
-
 </template>
 
 <script>
     const columns = [
-        { title: 'ID', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
-        { title: '名称',width: '10%', dataIndex: 'name', key: 'name' },
+        { title: '订单号', sorter: true,width: '20%',dataIndex: 'id', key: 'id' },
+        { title: '收货人', width: '20%',dataIndex: 'receive_name', key: 'receive_name' },
+        { title: '名称',width: '20%', dataIndex: 'name', key: 'name' },
         { title: '描述', width: '20%',dataIndex: 'detail', key: 'detail' },
-        { title: '库存', width: '10%',dataIndex: 'stock', key: 'stock' },
-        { title: '开始时间',width: '20%', dataIndex: 'startAt', key: 'startAt' },
-        { title: '剩余时间',width: '20%', dataIndex: 'endAt', key: 'endAt' },
-        { title: '修改', width: '20%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
+        { title: '发货', width: '20%',dataIndex: '', key: 'send', scopedSlots: { customRender: 'action' } },
     ];
 
     export default {
-        name: "Manage.vue",
+        name: "Gift.vue",
         mounted() {
             this.fetch();
         },
@@ -37,7 +33,6 @@
                 selectedRowKeys: [],
                 pagination: {},
                 loading: false,
-                timer: null  // 定时器名称
             }
         },
         methods:{
@@ -67,7 +62,7 @@
                 }else{
                     page = params.page;
                 }
-                this.$axios.get('http://api.moesome.com/spikes/manage?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('http://api.moesome.com/sends',{withCredentials: true}
                 ).then((response) => {
                     console.log("index:")
                     console.log(response)

@@ -6,7 +6,7 @@
             :pagination="pagination"
             @change="handleTableChange"
     >
-        <a-button :loading="record.loading" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="get(record)">领取</a-button>
+        <a-button :loading="record.loading" v-if="record.status === '正常'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="get(record)">领取</a-button>
     </a-table>
 </template>
 
@@ -14,7 +14,7 @@
     const columns = [
         { title: 'ID', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
         { title: '名称',width: '10%', dataIndex: 'name', key: 'name' },
-        { title: '描述', width: '40%',dataIndex: 'detail', key: 'detail' },
+        { title: '描述', width: '30%',dataIndex: 'detail', key: 'detail' },
         { title: '创建时间', width: '20%',dataIndex: 'createdAt', key: 'createdAt' },
         { title: '状态', width: '20%',dataIndex: 'status', key: 'status' },
         { title: '获取奖励', width: '10%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
@@ -35,16 +35,18 @@
         },
         methods:{
             get(record){
-                let provided = record.userId;
-                let spikeId = record.spikeId;
-                let spikeName = record.spikeName;
-                let received = this.$store.state.user.id;
-                // this.$axios.get('http://api.moesome.com/spike_order/index/'+page+"?order="+params.sortOrder,{withCredentials: true}
-                // ).then((response) => {
-                //     console.log(response)
-                // }).catch(function (e) {
-                //     console.log(e)
-                // });
+                let id = record.id;
+                this.$axios.get('http://api.moesome.com//send/remind/'+id,{withCredentials: true}
+                ).then((response) => {
+                    if (response.data.code === 0){
+                        this.showSuccessMsg("已提醒项目发起者发货！")
+                        record.status = "已申请兑奖"
+                    }else{
+                        this.showWrongMsg(response.data.message);
+                    }
+                }).catch(function () {
+                    //console.log(e)
+                });
 
             },
             handleTableChange (pagination, filters, sorter) {
@@ -102,7 +104,7 @@
                                 item.status = "所有者取消";
                                 break;
                             case 4:
-                                item.status = "用户已申请兑奖";
+                                item.status = "已申请兑奖";
                                 break;
                             case 5:
                                 item.status = "所有者已发送奖品";
