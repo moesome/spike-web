@@ -8,13 +8,9 @@
     >
         <a-button :loading="record.loading" v-if="(record.remain !== '已结束') && (record.stock > 0)"  type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="spike(record)">秒杀</a-button>
     </a-table>
-
 </template>
 
 <script>
-    import Vue from 'vue'
-    import { Table } from 'ant-design-vue';
-    Vue.use(Table);
     const columns = [
         { title: 'ID', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
         { title: '名称',width: '10%', dataIndex: 'name', key: 'name' },
@@ -35,26 +31,54 @@
                 selectedRowKeys: [],
                 pagination: {},
                 loading: false,
+                timer: null  // 定时器名称
             }
         },
         methods:{
+            check(record){
+                this.$axios.get("http://api.moesome.com/spike_orders/check/"+record.id,{withCredentials: true})
+                    .then((response) => {
+                        console.log(response);
+                        let data = response.data;
+                        if (data.code === 0){
+                            // 秒杀成功
+                            record.loading = false;
+                            clearInterval(this.timer);
+                            this.timer = null;
+                            record.stock--;
+                            this.showSuccessMsg("秒杀成功！")
+                        }else if (data.code === -513) {
+                            record.loading = false;
+                            clearInterval(this.timer);
+                            this.timer = null;
+                            this.showWrongMsg(data.message)
+                        }
+                    })
+                    .catch(function (e) {
+                        console.log(e)
+                    });
+            },
             spike(record){
+                console.log(record.id)
                 if (this.$store.state.isLogin === false) {
-                    this.$router.push("/user/login");
+                    this.$router.push({name:"login"});
                 }else{
                     record.loading = true;
-                    this.$axios.post("http://api.moesome.com/spike_order/"+record.id,{},{withCredentials: true})
+                    this.$axios.post("http://api.moesome.com/spike_orders",{"spikeId":record.id},{withCredentials: true})
                         .then((response) => {
-                            record.loading = false;
                             let data = response.data;
                             if (data.code === 0){
-                                this.showSuccessMsg("秒杀成功")
-                                record.stock--;
+                                //this.showSuccessMsg("秒杀请求已进入队列！");
+                                this.timer = setInterval(() => {
+                                    // 某些操作
+                                    this.check(record);
+                                }, 1000)
                             }else{
-                                this.showWrongMsg(data.code===-652?"已经秒杀过了":data.message)
+                                record.loading = false;
+                                this.showWrongMsg(data.message)
                             }
                         })
-                        .catch(function () {
+                        .catch(() => {
                             record.loading = false;
                         });
                 }
@@ -83,7 +107,7 @@
                 }else{
                     page = params.page;
                 }
-                this.$axios.get('http://api.moesome.com/spike/index/'+page+"?order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('http://api.moesome.com/spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
                     console.log("index:")
                     console.log(response)
@@ -95,9 +119,6 @@
                     for (let i = 0;i < list.length;i++) {
                         let item = list[i];
                         item.key = item.id;
-                        if (item.stock === -1){
-                            item.stock = "无限";
-                        }
                         item.now = this.$dateFormat(now);
                         item.startAt = this.$dateFormat(item.startAt);
                         item.endAt = this.$dateFormat(item.endAt);

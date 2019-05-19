@@ -35,8 +35,6 @@ Vue.prototype.$convertTimestampToString = function(usedTime){
     //计算相差分钟数
     let leave2=leave1%(3600*1000);        //计算小时数后剩余的毫秒数
     let minutes=Math.floor(leave2/(60*1000));
-    //计算相差秒数
-    let leave3=leave2%(60*1000);
     //let seconds=Math.floor(leave3/1000);
     let time = days + " 天 "+hours+" 时 "+minutes+" 分 ";
     return time;

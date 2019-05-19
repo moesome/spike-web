@@ -49,17 +49,11 @@
 </template>
 
 <script>
-    import Vue from 'vue'
-    import { Form } from 'ant-design-vue';
-    Vue.use(Form);
-    import { Input } from 'ant-design-vue';
-    Vue.use(Input);
     export default {
         name: "Login",
         data () {
             return {
                 thisForm: this.$form.createForm(this),
-
                 btnLoading: false
             };
         },
@@ -69,6 +63,11 @@
                     title: '发生错误',
                     content: msg,
                 }));
+            },
+            mounted(){
+                if (this.$store.state.user !== null) {
+                    this.$router.push({name:"spikes"});
+                }
             },
             handleSubmit(e) {
                 e.preventDefault();
@@ -84,13 +83,13 @@
                                 console.log("login success:")
                                 console.log(response)
                                 if (response.data.code === 0){
-                                    this.$router.push("/spike/index");
+                                    this.$router.push({name:"spikes"});
                                     this.$store.commit("login",response.data.object);
                                 }else{
                                     this.showMsg(response.data.message);
                                 }
                             })
-                            .catch(function () {
+                            .catch(() => {
                                 this.btnLoading = false;
                                 this.showMsg("未知错误")
                             });

@@ -13,19 +13,39 @@ export default new Router({
       component: () => import(/* webpackChunkName: "layout" */ './views/Layout.vue'),
       children:[
         {
-          path: '/user/login',
+          path: '/users/login',
           name: 'login',
           component: () => import(/* webpackChunkName: "user" */ './views/user/Login.vue')
         },
         {
-          path: '/spike/index',
-          name: 'index',
+          path: '/users/register',
+          name: 'register',
+          component: () => import(/* webpackChunkName: "user" */ './views/user/Register.vue')
+        },
+        {
+          path: '/spikes',
+          name: 'spikes',
           component: () => import(/* webpackChunkName: "index" */ './views/spike/Index.vue')
         },
         {
-          path: '/spike/:itemId',
-          name: 'item',
-          component: () => import(/* webpackChunkName: "index" */ './views/spike/Item.vue')
+          path: '/orders',
+          name: 'orders',
+          component: () => import(/* webpackChunkName: "index" */ './views/order/Index.vue')
+        },
+        {
+          path: '/spikes/manage',
+          name: 'manage',
+          component: () => import(/* webpackChunkName: "index" */ './views/spike/Manage.vue')
+        },
+        {
+          path: '/spikes/create',
+          name: 'create',
+          component: () => import(/* webpackChunkName: "spike" */ './views/spike/Create.vue')
+        },
+        {
+          path: '/spikes/:id/edit',
+          name: 'edit',
+          component: () => import(/* webpackChunkName: "spike" */ './views/spike/Edit.vue')
         },
       ]
     },
