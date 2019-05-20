@@ -138,6 +138,9 @@
                     case "users":
                         first = "用户";
                         break;
+                    case "gift":
+                        first = "派奖";
+                        break;
                 }
                 switch (second) {
                     case "index":

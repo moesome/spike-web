@@ -64,7 +64,7 @@
                     this.$router.push({name:"login"});
                 }else{
                     record.loading = true;
-                    this.$axios.post("http://api.moesome.com/spike_orders",{"spikeId":record.id},{withCredentials: true})
+                    this.$axios.patch("http://api.moesome.com/spike_orders",{"spikeId":record.id},{withCredentials: true})
                         .then((response) => {
                             let data = response.data;
                             if (data.code === 0){
@@ -106,6 +106,9 @@
                     page = 1;
                 }else{
                     page = params.page;
+                }
+                if (params.sortOrder === undefined){
+                    params.sortOrder = 'descend'
                 }
                 this.$axios.get('http://api.moesome.com/spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {

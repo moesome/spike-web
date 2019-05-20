@@ -35,8 +35,8 @@
         },
         methods:{
             get(record){
-                let id = record.id;
-                this.$axios.get('http://api.moesome.com//send/remind/'+id,{withCredentials: true}
+                let spikeOrderId = record.id;
+                this.$axios.patch('http://api.moesome.com/sends/remind/'+spikeOrderId,{},{withCredentials: true}
                 ).then((response) => {
                     if (response.data.code === 0){
                         this.showSuccessMsg("已提醒项目发起者发货！")
@@ -71,6 +71,9 @@
                     page = 1;
                 }else{
                     page = params.page;
+                }
+                if (params.sortOrder === undefined){
+                    params.sortOrder = 'descend'
                 }
                 this.$axios.get('http://api.moesome.com/spike_orders?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {

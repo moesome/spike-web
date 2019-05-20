@@ -67,6 +67,9 @@
                 }else{
                     page = params.page;
                 }
+                if (params.sortOrder === undefined){
+                    params.sortOrder = 'descend'
+                }
                 this.$axios.get('http://api.moesome.com/spikes/manage?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
                     console.log("index:")
