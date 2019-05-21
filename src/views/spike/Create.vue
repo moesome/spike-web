@@ -88,15 +88,26 @@
                     content: msg,
                 }));
             },
+            showWrongMsg(msg){
+                this.$modal.error(({
+                    title: '发生错误',
+                    content: msg,
+                }));
+            },
             handleSubmit(e) {
                 e.preventDefault();
                 this.thisForm.validateFields((err, values) => {
                     if (!err) {
                         this.btnLoading = true;
+                        if (this.startAtTime === null || this.startAtDate === null ||this.endAtDate===null||this.endAtTime===null){
+                            this.showWrongMsg("请填写日期！")
+                            this.btnLoading = false;
+                            return;
+                        }
                         let startAt = this.startAtDate.format("YYYY-MM-DD") +" "+ this.startAtTime.format("HH:mm:ss");
                         let endAt = this.endAtDate.format("YYYY-MM-DD") +" "+ this.endAtTime.format("HH:mm:ss");
 
-                        this.$axios.post('http://api.moesome.com/spikes', {
+                        this.$axios.post('https://api.moesome.com/spikes', {
                             "name" : values.name,
                             "detail" : values.detail,
                             "stock" : values.stock,
@@ -125,3 +136,6 @@
 <style scoped>
 
 </style>
+
+
+

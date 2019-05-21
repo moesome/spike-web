@@ -70,10 +70,10 @@
                 if (params.sortOrder === undefined){
                     params.sortOrder = 'descend'
                 }
-                this.$axios.get('http://api.moesome.com/spikes/manage?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('https://api.moesome.com/spikes/manage?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
-                    console.log("index:")
-                    console.log(response)
+                    //console.log("index:")
+                    //console.log(response)
                     const pagination = { ...this.pagination };
                     pagination.total = response.data.count;
                     this.loading = false;
@@ -87,8 +87,9 @@
                     }
                     this.data = list;
                     this.pagination = pagination;
-                }).catch(function (e) {
-                    console.log(e)
+                }).catch(() => {
+                    //this.showWrongMsg("出现异常，请重试");
+                    this.loading = false;
                 });
             },
             showWrongMsg(msg){

@@ -59,7 +59,7 @@
             handleOk() {
                 this.visible = false;
                 this.confirmLoading = false;
-                this.$axios.patch('http://api.moesome.com/sends/'+this.record.id,{
+                this.$axios.patch('https://api.moesome.com/sends/'+this.record.id,{
                     },
                     {withCredentials: true}
                 ).then((response) => {
@@ -72,7 +72,7 @@
                     this.record = null;
                 }).catch(function (e) {
                     this.record = null;
-                    console.log(e)
+                    //console.log(e)
                 });
             },
             handleCancel() {
@@ -112,16 +112,21 @@
                     params.sortOrder = 'descend'
                 }
 
-                this.$axios.get('http://api.moesome.com/sends?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('https://api.moesome.com/sends?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
-                    console.log("index:")
-                    console.log(response)
+                    //console.log("index:")
+                    //console.log(response)
                     const pagination = { ...this.pagination };
                     pagination.total = response.data.count;
                     this.loading = false;
                     let list = response.data.object;
+                    let newList = [];
+                    let pos = 0;
                     for (let i = 0;i < list.length;i++) {
                         let item = list[i];
+                        if (item.username === null){
+                            continue;
+                        }
                         item.key = item.spikeOrderId;
                         item.id = item.spikeOrderId;
                         item.receive_name = item.username;
@@ -154,11 +159,12 @@
                                 break;
                         }
                         item.loading = false;
+                        newList[pos++] = item;
                     }
-                    this.data = list;
+                    this.data = newList;
                     this.pagination = pagination;
                 }).catch(function (e) {
-                    console.log(e)
+                    //console.log(e)
                 });
             },
             showWrongMsg(msg){

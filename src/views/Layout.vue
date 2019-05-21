@@ -97,11 +97,11 @@
         mounted(){
             this.updateBreadcrumb();
             // 用 cookies 向服务器拉取用户数据存到 vuex 中
-            this.$axios.get("http://api.moesome.com/check",{withCredentials: true})
+            this.$axios.get("https://api.moesome.com/check",{withCredentials: true})
                 .then((response) => {
                     if (response.data.code === 0){
-                        console.log("login");
-                        console.log(response);
+                        //console.log("login");
+                        //console.log(response);
                         this.$store.commit("login",response.data.object);
                     }else{
                         this.$router.push({name:"login"});
@@ -166,7 +166,7 @@
                 this.third = third;
             },
             exit(){
-                this.$axios.post("http://api.moesome.com/logout",{},{withCredentials: true})
+                this.$axios.post("https://api.moesome.com/logout",{},{withCredentials: true})
                     .then((response) => {
                         if (response.data.code === 0){
                             this.$store.commit("logout");

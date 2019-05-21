@@ -136,7 +136,7 @@
         methods: {
             fetchData () {
                 // replace getPost with your data fetching util / API wrapper
-                this.$axios.get('http://api.moesome.com/users/'+this.$route.params.id,{withCredentials: true})
+                this.$axios.get('https://api.moesome.com/users/'+this.$route.params.id,{withCredentials: true})
                     .then((response) => {
                         if (response.data.code === 0){
                             let data = response.data.object;
@@ -178,7 +178,7 @@
                     }
                     if (!err) {
                         this.btnLoading = true;
-                        this.$axios.patch('http://api.moesome.com/users/'+this.$store.state.user.id, {
+                        this.$axios.patch('https://api.moesome.com/users/'+this.$store.state.user.id, {
                             "username" : values.username,
                             "nickname" : values.nickname,
                             "password" : ((values.password!=undefined)&&(values.password!=""))?this.$md5(values.password):"",

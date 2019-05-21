@@ -36,9 +36,9 @@
         },
         methods:{
             check(record){
-                this.$axios.get("http://api.moesome.com/spike_orders/check/"+record.id,{withCredentials: true})
+                this.$axios.get("https://api.moesome.com/spike_orders/check/"+record.id,{withCredentials: true})
                     .then((response) => {
-                        console.log(response);
+                        //console.log(response);
                         let data = response.data;
                         if (data.code === 0){
                             // 秒杀成功
@@ -55,16 +55,16 @@
                         }
                     })
                     .catch(function (e) {
-                        console.log(e)
+                        //console.log(e)
                     });
             },
             spike(record){
-                console.log(record.id)
+                //console.log(record.id)
                 if (this.$store.state.isLogin === false) {
                     this.$router.push({name:"login"});
                 }else{
                     record.loading = true;
-                    this.$axios.patch("http://api.moesome.com/spike_orders",{"spikeId":record.id},{withCredentials: true})
+                    this.$axios.patch("https://api.moesome.com/spike_orders",{"spikeId":record.id},{withCredentials: true})
                         .then((response) => {
                             let data = response.data;
                             if (data.code === 0){
@@ -110,10 +110,10 @@
                 if (params.sortOrder === undefined){
                     params.sortOrder = 'descend'
                 }
-                this.$axios.get('http://api.moesome.com/spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('https://api.moesome.com/spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
-                    console.log("index:")
-                    console.log(response)
+                    //console.log("index:")
+                    //console.log(response)
                     const pagination = { ...this.pagination };
                     pagination.total = response.data.count;
                     let now = response.data.now;
@@ -142,7 +142,7 @@
                     this.data = list;
                     this.pagination = pagination;
                 }).catch(function (e) {
-                    console.log(e)
+                    //console.log(e)
                 });
             },
             showWrongMsg(msg){
@@ -164,3 +164,6 @@
 <style scoped>
 
 </style>
+
+
+
