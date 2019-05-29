@@ -158,7 +158,7 @@
                     }
                     if (!err) {
                         this.btnLoading = true;
-                        this.$axios.post('https://api.moesome.com/users', {
+                        this.$axios.post('users', {
                             "username" : values.username,
                             "nickname" : values.nickname,
                             "password" : this.$md5(values.password),

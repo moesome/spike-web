@@ -9,7 +9,6 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'layout',
       component: () => import(/* webpackChunkName: "layout" */ './views/Layout.vue'),
       children:[
         {
@@ -51,6 +50,11 @@ export default new Router({
           path: '/spikes/:id/edit',
           name: 'spikes.edit',
           component: () => import(/* webpackChunkName: "spike" */ './views/spike/Edit.vue')
+        },
+        {
+          path: '/',
+          name: 'home',
+          component: () => import(/* webpackChunkName: "spike" */ './views/Home.vue')
         },
         {
           path: '/gift',

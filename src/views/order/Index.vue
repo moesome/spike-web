@@ -36,7 +36,7 @@
         methods:{
             get(record){
                 let spikeOrderId = record.id;
-                this.$axios.patch('https://api.moesome.com/sends/remind/'+spikeOrderId,{},{withCredentials: true}
+                this.$axios.patch('sends/remind/'+spikeOrderId,{},{withCredentials: true}
                 ).then((response) => {
                     if (response.data.code === 0){
                         this.showSuccessMsg("已提醒项目发起者发货！")
@@ -75,7 +75,7 @@
                 if (params.sortOrder === undefined){
                     params.sortOrder = 'descend'
                 }
-                this.$axios.get('https://api.moesome.com/spike_orders?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('spike_orders?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
                     //console.log("index:")
                     //console.log(response)

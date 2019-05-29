@@ -21,7 +21,7 @@
         { title: '描述', width: '20%',dataIndex: 'detail', key: 'detail' },
         { title: '库存', width: '10%',dataIndex: 'stock', key: 'stock' },
         { title: '开始时间',width: '20%', dataIndex: 'startAt', key: 'startAt' },
-        { title: '剩余时间',width: '20%', dataIndex: 'endAt', key: 'endAt' },
+        { title: '结束时间',width: '20%', dataIndex: 'endAt', key: 'endAt' },
         { title: '修改', width: '20%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
     ];
 
@@ -70,7 +70,7 @@
                 if (params.sortOrder === undefined){
                     params.sortOrder = 'descend'
                 }
-                this.$axios.get('https://api.moesome.com/spikes/manage?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('spikes/manage?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
                     //console.log("index:")
                     //console.log(response)
@@ -89,7 +89,7 @@
                     this.pagination = pagination;
                 }).catch(() => {
                     //this.showWrongMsg("出现异常，请重试");
-                    this.loading = false;
+                    //this.loading = false;
                 });
             },
             showWrongMsg(msg){

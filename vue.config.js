@@ -1,3 +1,4 @@
+var fs = require('fs')
 module.exports = {
     css: {
         loaderOptions: {
@@ -10,5 +11,6 @@ module.exports = {
         allowedHosts: [
             'spike.moesome.com',
         ],
+
     }
 }

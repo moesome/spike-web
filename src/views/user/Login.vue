@@ -78,7 +78,7 @@
                 this.thisForm.validateFields((err, values) => {
                     if (!err) {
                         this.btnLoading = true;
-                        this.$axios.post('https://api.moesome.com/login', {
+                        this.$axios.post('login', {
                             "username" : values.username,
                             "password" : this.$md5(values.password),
                             },{withCredentials: true})

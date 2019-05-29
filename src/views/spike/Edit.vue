@@ -90,7 +90,7 @@
         methods: {
             fetchData () {
                 // replace getPost with your data fetching util / API wrapper
-                this.$axios.get('https://api.moesome.com/spikes/'+this.$route.params.id,{withCredentials: true})
+                this.$axios.get('spikes/'+this.$route.params.id,{withCredentials: true})
                     .then((response) => {
                         if (response.data.code === 0){
                             let data = response.data.object[0];
@@ -122,7 +122,7 @@
                 this.thisForm.validateFields((err, values) => {
                     if (!err) {
                         this.btnLoading = true;
-                        this.$axios.patch('https://api.moesome.com/spikes/'+this.$route.params.id, {
+                        this.$axios.patch('spikes/'+this.$route.params.id, {
                             "name" : values.name,
                             "detail" : values.detail,
                             "stock" : values.stock,

@@ -36,7 +36,7 @@
         },
         methods:{
             check(record){
-                this.$axios.get("https://api.moesome.com/spike_orders/check/"+record.id,{withCredentials: true})
+                this.$axios.get("spike_orders/check/"+record.id,{withCredentials: true})
                     .then((response) => {
                         //console.log(response);
                         let data = response.data;
@@ -64,7 +64,7 @@
                     this.$router.push({name:"login"});
                 }else{
                     record.loading = true;
-                    this.$axios.patch("https://api.moesome.com/spike_orders",{"spikeId":record.id},{withCredentials: true})
+                    this.$axios.patch("spike_orders",{"spikeId":record.id},{withCredentials: true})
                         .then((response) => {
                             let data = response.data;
                             if (data.code === 0){
@@ -110,7 +110,7 @@
                 if (params.sortOrder === undefined){
                     params.sortOrder = 'descend'
                 }
-                this.$axios.get('https://api.moesome.com/spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
                     //console.log("index:")
                     //console.log(response)

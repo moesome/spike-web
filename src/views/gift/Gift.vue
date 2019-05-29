@@ -59,7 +59,7 @@
             handleOk() {
                 this.visible = false;
                 this.confirmLoading = false;
-                this.$axios.patch('https://api.moesome.com/sends/'+this.record.id,{
+                this.$axios.patch('sends/'+this.record.id,{
                     },
                     {withCredentials: true}
                 ).then((response) => {
@@ -112,7 +112,7 @@
                     params.sortOrder = 'descend'
                 }
 
-                this.$axios.get('https://api.moesome.com/sends?page='+page+"&order="+params.sortOrder,{withCredentials: true}
+                this.$axios.get('sends?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
                     //console.log("index:")
                     //console.log(response)

@@ -107,7 +107,7 @@
                         let startAt = this.startAtDate.format("YYYY-MM-DD") +" "+ this.startAtTime.format("HH:mm:ss");
                         let endAt = this.endAtDate.format("YYYY-MM-DD") +" "+ this.endAtTime.format("HH:mm:ss");
 
-                        this.$axios.post('https://api.moesome.com/spikes', {
+                        this.$axios.post('spikes', {
                             "name" : values.name,
                             "detail" : values.detail,
                             "stock" : values.stock,
