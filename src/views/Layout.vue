@@ -39,9 +39,11 @@
                 <div>
                     <a-row>
                         <a-col :offset="20" :span="4">
-                            <a-button v-show="!isLogin" type="dashed" ghost style="margin-right: 30px"><router-link :to="{ name: 'login'}">登录</router-link></a-button>
-                            <a-button v-show="!isLogin" type="dashed" ghost><router-link :to="{ name: 'users.create'}">注册</router-link></a-button>
-                            <span v-show="isLogin" id="nickname"><a @click="editUser" style="color:black;">{{(this.$store.state.user===null)?"":this.$store.state.user.nickname}}</a><a href="#" @click="exit" style="margin-left: 20px;color:white">退出</a></span>
+                            <a-button v-if="!isLogin" type="dashed" ghost style="margin-right: 30px"><router-link :to="{ name: 'login'}">登录</router-link></a-button>
+                            <a-button v-if="!isLogin" type="dashed" ghost><router-link :to="{ name: 'users.create'}">注册</router-link></a-button>
+                            <span v-if="isLogin" id="nickname">
+                                <a @click="editUser" style="color:black;">{{this.$store.state.user.nickname}}</a>
+                                <a href="#" @click="exit" style="margin-left: 20px;color:white">退出</a></span>
                         </a-col>
                     </a-row>
                 </div>

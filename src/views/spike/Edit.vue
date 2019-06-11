@@ -34,6 +34,16 @@
             />
         </a-form-item>
         <a-form-item
+                label="售价"
+                :label-col="{ span: 8 }"
+                :wrapper-col="{ span: 8 }"
+        >
+            <a-input-number
+                    :min="0" :max="999999.99"
+                    v-decorator="['price',{rules: [{ required: true, message: '请输入售价!' }]}]"
+            />
+        </a-form-item>
+        <a-form-item
                 label="开始时间"
                 :label-col="{ span: 8 }"
                 :wrapper-col="{ span: 8 }"
@@ -79,6 +89,9 @@
             };
         },
         created () {
+            if (this.$store.state.isLogin === false) {
+                this.$router.push({name:"login"});
+            }
             // 组件创建完后获取数据，
             // 此时 data 已经被 observed 了
             this.fetchData()
@@ -101,6 +114,7 @@
                                 stock: data.stock,
                                 startAt: data.startAt,
                                 endAt: data.endAt,
+                                price: data.price,
                             });
                         }else{
                             this.showMsg(response.data.message);
@@ -128,6 +142,7 @@
                             "stock" : values.stock,
                             "startAt" : values.startAt,
                             "endAt" : values.endAt,
+                            "price" : values.price,
                         },{withCredentials: true})
                             .then((response) => {
                                 this.btnLoading = false;

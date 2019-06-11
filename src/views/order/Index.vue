@@ -6,7 +6,8 @@
             :pagination="pagination"
             @change="handleTableChange"
     >
-        <a-button :loading="record.loading" v-if="record.status === '正常'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="get(record)">领取</a-button>
+        <a-button :loading="record.loading" v-if="record.status === '正常'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="get(record)">提醒发货</a-button>
+        <a-button :loading="record.loading" v-if="record.status === '所有者已发送奖品'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="received(record)">确认收货</a-button>
     </a-table>
 </template>
 
@@ -22,6 +23,9 @@
     export default {
         name: "Order.vue",
         mounted() {
+            if (this.$store.state.isLogin === false) {
+                this.$router.push({name:"login"});
+            }
             this.fetch();
         },
         data() {
@@ -48,6 +52,19 @@
                     //console.log(e)
                 });
 
+            },
+            received(record){
+                let spikeOrderId = record.id;
+                this.$axios.patch('sends/received/'+spikeOrderId,{},{withCredentials: true}
+                ).then((response) => {
+                    if (response.data.code === 0){
+                        record.status = "已收货"
+                    }else{
+                        this.showWrongMsg(response.data.message);
+                    }
+                }).catch(function () {
+                    //console.log(e)
+                });
             },
             handleTableChange (pagination, filters, sorter) {
                 //console.log(pagination);
@@ -90,27 +107,27 @@
                         item.name = item.spikeName;
                         item.createdAt = this.$dateFormat(item.spikeOrderCreatedAt).toLocaleString();
                         /**
-                         *   1.正常
-                             2.用户取消
-                             3.所有者取消
-                             4.用户已申请兑奖
-                             5.所有者已发送奖品
+                         *   1.待发货
+                         2.用户催单
+                         3.所有者已发送奖品
+                         4.完成订单
+                         5.订单异常
                          */
                         switch (item.status) {
                             case 1:
-                                item.status = "正常";
+                                item.status = "待发货";
                                 break;
                             case 2:
-                                item.status = "用户取消";
+                                item.status = "用户催单";
                                 break;
                             case 3:
-                                item.status = "所有者取消";
+                                item.status = "所有者已发送奖品";
                                 break;
                             case 4:
-                                item.status = "已申请兑奖";
+                                item.status = "完成订单";
                                 break;
                             case 5:
-                                item.status = "所有者已发送奖品";
+                                item.status = "订单异常";
                                 break;
                         }
                         item.loading = false;

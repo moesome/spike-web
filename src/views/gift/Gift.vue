@@ -39,6 +39,9 @@
     export default {
         name: "Gift.vue",
         mounted() {
+            if (this.$store.state.isLogin === false) {
+                this.$router.push({name:"login"});
+            }
             this.fetch();
         },
         data() {
@@ -140,22 +143,29 @@
                                     { title: '创建时间', width: '20%',dataIndex: 'createdAt', key: 'createdAt' },
                                     { title: '发货', width: '10%',dataIndex: '', key: 'send', scopedSlots: { customRender: 'action' } },
                             */
+                        /**
+                         *   1.待发货
+                         2.用户催单
+                         3.所有者已发送奖品
+                         4.完成订单
+                         5.订单异常
+                         */
 
                         switch (item.status) {
                             case 1:
-                                item.status = "正常";
+                                item.status = "待发货";
                                 break;
                             case 2:
-                                item.status = "用户取消";
-                                break;
-                            case 3:
-                                item.status = "所有者取消";
-                                break;
-                            case 4:
                                 item.status = "用户催单";
                                 break;
+                            case 3:
+                                item.status = "所有者已发送奖品";
+                                break;
+                            case 4:
+                                item.status = "完成订单";
+                                break;
                             case 5:
-                                item.status = "已发货";
+                                item.status = "订单异常";
                                 break;
                         }
                         item.loading = false;

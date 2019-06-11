@@ -14,9 +14,10 @@
     const columns = [
         { title: 'ID', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
         { title: '名称',width: '10%', dataIndex: 'name', key: 'name' },
-        { title: '描述', width: '40%',dataIndex: 'detail', key: 'detail' },
+        { title: '描述', width: '30%',dataIndex: 'detail', key: 'detail' },
         { title: '余量', width: '10%',dataIndex: 'stock', key: 'stock' },
         { title: '剩余时间',width: '20%', dataIndex: 'remain', key: 'remain' },
+        { title: '售价', width: '10%',dataIndex: 'price', key: 'price'},
         { title: '秒杀', width: '10%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
     ];
 
@@ -54,11 +55,26 @@
                             this.showWrongMsg(data.message)
                         }
                     })
-                    .catch(function (e) {
+                    .catch(function () {
                         //console.log(e)
                     });
             },
             spike(record){
+                let me = this;
+                this.$modal.confirm({
+                    title: '您即将秒杀商品： '+record.name,
+                    content: '此操作将扣除您 '+record.price+' 个金币是否继续？',
+                    onOk() {
+                        if (me.$store.state.user.coin > record.price){
+                            me.doSpike(record)
+                        } else {
+                            me.showWrongMsg("没有足够金币")
+                        }
+                    },
+                    onCancel() {},
+                });
+            },
+            doSpike(record){
                 //console.log(record.id)
                 if (this.$store.state.isLogin === false) {
                     this.$router.push({name:"login"});
@@ -112,7 +128,7 @@
                 }
                 this.$axios.get('spikes?page='+page+"&order="+params.sortOrder,{withCredentials: true}
                 ).then((response) => {
-                    //console.log("index:")
+                   // console.log("index:")
                     //console.log(response)
                     const pagination = { ...this.pagination };
                     pagination.total = response.data.count;
@@ -142,7 +158,7 @@
                     this.data = list;
                     this.pagination = pagination;
                 }).catch(function (e) {
-                    //console.log(e)
+                    console.log(e)
                 });
             },
             showWrongMsg(msg){

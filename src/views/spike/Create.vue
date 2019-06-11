@@ -34,6 +34,16 @@
             />
         </a-form-item>
         <a-form-item
+                label="售价"
+                :label-col="{ span: 8 }"
+                :wrapper-col="{ span: 8 }"
+        >
+            <a-input-number
+                    :min="0" :max="999999.99"
+                    v-decorator="['price',{rules: [{ required: true, message: '请输入售价!' }]}]"
+            />
+        </a-form-item>
+        <a-form-item
                 label="开始时间"
                 :label-col="{ span: 8 }"
                 :wrapper-col="{ span: 8 }"
@@ -81,6 +91,11 @@
                 endAtTime: null,
             };
         },
+        mounted(){
+            if (this.$store.state.isLogin === false) {
+                this.$router.push({name:"login"});
+            }
+        },
         methods:{
             showMsg(msg){
                 this.$modal.error(({
@@ -113,6 +128,7 @@
                             "stock" : values.stock,
                             "startAt" : startAt,
                             "endAt" : endAt,
+                            "price" : values.price,
                         },{withCredentials: true})
                             .then((response) => {
                                 this.btnLoading = false;

@@ -18,8 +18,9 @@
     const columns = [
         { title: 'ID', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
         { title: '名称',width: '10%', dataIndex: 'name', key: 'name' },
-        { title: '描述', width: '20%',dataIndex: 'detail', key: 'detail' },
+        { title: '描述', width: '10%',dataIndex: 'detail', key: 'detail' },
         { title: '库存', width: '10%',dataIndex: 'stock', key: 'stock' },
+        { title: '售价', width: '10%',dataIndex: 'price', key: 'price' },
         { title: '开始时间',width: '20%', dataIndex: 'startAt', key: 'startAt' },
         { title: '结束时间',width: '20%', dataIndex: 'endAt', key: 'endAt' },
         { title: '修改', width: '20%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
@@ -28,6 +29,9 @@
     export default {
         name: "Manage.vue",
         mounted() {
+            if (this.$store.state.isLogin === false) {
+                this.$router.push({name:"login"});
+            }
             this.fetch();
         },
         data() {
