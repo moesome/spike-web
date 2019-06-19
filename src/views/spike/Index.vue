@@ -84,11 +84,13 @@
                         .then((response) => {
                             let data = response.data;
                             if (data.code === 0){
-                                //this.showSuccessMsg("秒杀请求已进入队列！");
-                                this.timer = setInterval(() => {
-                                    // 某些操作
-                                    this.check(record);
-                                }, 1000)
+                                this.showSuccessMsg("排队中...");
+                                setTimeout(()=>{
+                                    this.timer = setInterval(() => {
+                                        // 某些操作
+                                        this.check(record);
+                                    }, 1000)
+                                },1000)
                             }else{
                                 record.loading = false;
                                 this.showWrongMsg(data.message)

@@ -28,12 +28,12 @@
 
 <script>
     const columns = [
-        { title: '订单号', sorter: true,width: '10%',dataIndex: 'id', key: 'id' },
+        { title: '订单号', sorter: true,width: '20%',dataIndex: 'id', key: 'id' },
         { title: '收货人', width: '20%',dataIndex: 'receive_name', key: 'receive_name' },
         { title: '商品名称',width: '20%', dataIndex: 'name', key: 'name' },
         { title: '订单创建时间', width: '20%',dataIndex: 'createdAt', key: 'createdAt' },
         { title: '订单状态', width: '10%',dataIndex: 'status', key: 'status' },
-        { title: '发货', width: '20%',dataIndex: '', key: 'send', scopedSlots: { customRender: 'action' } },
+        { title: '发货', width: '10%',dataIndex: '', key: 'send', scopedSlots: { customRender: 'action' } },
     ];
 
     export default {

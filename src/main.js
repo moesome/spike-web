@@ -6,12 +6,6 @@ import store from './store'
 Vue.config.productionTip = false
 
 import './axios.config.js';
-import { Layout } from 'ant-design-vue';
-Vue.use(Layout);
-import { Row } from 'ant-design-vue';
-Vue.use(Row);
-import { Col } from 'ant-design-vue';
-Vue.use(Col);
 
 Vue.prototype.$dateFormat = function (dateString){
     let subStr = dateString.split(" ");

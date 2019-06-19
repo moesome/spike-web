@@ -19,19 +19,9 @@
                 <a-menu-item key="gift">
                     <router-link to="/gift"><a-icon type="gift"/>派奖</router-link>
                 </a-menu-item>
-                <!--<a-sub-menu key="production">-->
-                    <!--<span slot="title"><a-icon type="shopping-cart" /><span>商品管理</span></span>-->
-                    <!--<a-menu-item key="2"><router-link to="/item/category">分类管理</router-link></a-menu-item>-->
-                    <!--<a-menu-item key="3"><router-link to="/item/brand">品牌管理</router-link></a-menu-item>-->
-                    <!--<a-menu-item key="4">商品列表</a-menu-item>-->
-                    <!--<a-menu-item key="5">规格参数</a-menu-item>-->
-                <!--</a-sub-menu>-->
-                <!--<a-sub-menu key="permission">-->
-                    <!--<span slot="title"><a-icon type="setting" /><span>权限管理</span></span>-->
-                    <!--<a-menu-item key="12">权限管理</a-menu-item>-->
-                    <!--<a-menu-item key="13">角色管理</a-menu-item>-->
-                    <!--<a-menu-item key="14">人员管理</a-menu-item>-->
-                <!--</a-sub-menu>-->
+                <a-menu-item key="account">
+                    <router-link to="/account"><a-icon type="dollar"/>账户</router-link>
+                </a-menu-item>
             </a-menu>
         </a-layout-sider>
         <a-layout style="padding: 0 10px 10px">
@@ -61,6 +51,12 @@
 </template>
 <script>
     import Vue from 'vue'
+    import { Layout } from 'ant-design-vue';
+    Vue.use(Layout);
+    import { Row } from 'ant-design-vue';
+    Vue.use(Row);
+    import { Col } from 'ant-design-vue';
+    Vue.use(Col);
     import { Breadcrumb } from 'ant-design-vue';
     Vue.use(Breadcrumb);
     import { Icon } from 'ant-design-vue';
@@ -83,6 +79,8 @@
     Vue.use(Table);
     import { InputNumber } from 'ant-design-vue';
     Vue.use(InputNumber);
+    import { Card } from 'ant-design-vue';
+    Vue.use(Card);
 
     Vue.prototype.$modal = Modal
 
@@ -142,6 +140,9 @@
                         break;
                     case "gift":
                         first = "派奖";
+                        break;
+                    case "account":
+                        first = "账户";
                         break;
                 }
                 switch (second) {

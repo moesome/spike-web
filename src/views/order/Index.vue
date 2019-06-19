@@ -6,8 +6,8 @@
             :pagination="pagination"
             @change="handleTableChange"
     >
-        <a-button :loading="record.loading" v-if="record.status === '正常'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="get(record)">提醒发货</a-button>
-        <a-button :loading="record.loading" v-if="record.status === '所有者已发送奖品'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="received(record)">确认收货</a-button>
+        <a-button :loading="record.loading" v-if="record.status === '待发货'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="get(record)">提醒发货</a-button>
+        <a-button :loading="record.loading" v-else-if="record.status === '所有者已发送奖品'" type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="received(record)">确认收货</a-button>
     </a-table>
 </template>
 
@@ -134,7 +134,7 @@
                     }
                     this.data = list;
                     this.pagination = pagination;
-                }).catch(function (e) {
+                }).catch(function () {
                     //console.log(e)
                 });
             },

@@ -61,6 +61,11 @@ export default new Router({
           name: 'gift',
           component: () => import(/* webpackChunkName: "spike" */ './views/gift/Gift.vue')
         },
+        {
+          path: '/account',
+          name: 'account',
+          component: () => import(/* webpackChunkName: "spike" */ './views/user/Account.vue')
+        },
       ]
     },
   ]
