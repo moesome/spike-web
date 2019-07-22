@@ -3,7 +3,7 @@
         <a-row justify="space-around">
             <a-col :offset="8" :span="6">
                 <div style="background:#ECECEC; padding:10px">
-                    <a-card title="余额" :bordered="false" style="width: 300px;">
+                    <a-card title="余额" :bordered="false">
                         <a-row type="flex" justify="space-around">
                             <a-col style="font-size: 30px;margin: 0">
                                 {{this.$store.state.user!=null?this.$store.state.user.coin:""}}
@@ -63,7 +63,7 @@
             },
             handleOk() {
                 this.confirmLoading = true;
-                window.location="http://api.moesome.com/recharge/"+this.amount;
+                window.location="https://api.moesome.com/recharge/"+this.amount;
             },
             handleCancel() {
                 this.visible = false

@@ -52,6 +52,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "spike" */ './views/spike/Edit.vue')
         },
         {
+          path: '/spikes/detail/:id',
+          name: 'spikes.detail',
+          component: () => import(/* webpackChunkName: "spike" */ './views/spike/Detail.vue')
+        },
+        {
           path: '/',
           name: 'home',
           component: () => import(/* webpackChunkName: "spike" */ './views/Home.vue')

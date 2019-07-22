@@ -6,7 +6,7 @@
             :pagination="pagination"
             @change="handleTableChange"
     >
-        <a-button :loading="record.loading" v-if="(record.remain !== '已结束') && (record.stock > 0)"  type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="spike(record)">秒杀</a-button>
+        <a-button type="primary" ghost slot="action" href="javascript:;" slot-scope="record" @click="toDetail(record)">详情</a-button>
     </a-table>
 </template>
 
@@ -18,7 +18,7 @@
         { title: '余量', width: '10%',dataIndex: 'stock', key: 'stock' },
         { title: '剩余时间',width: '20%', dataIndex: 'remain', key: 'remain' },
         { title: '售价', width: '10%',dataIndex: 'price', key: 'price'},
-        { title: '秒杀', width: '10%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
+        { title: '详情', width: '10%',dataIndex: '', key: 'spike', scopedSlots: { customRender: 'action' } },
     ];
 
     export default {
@@ -36,7 +36,7 @@
             }
         },
         methods:{
-            check(record){
+            /*check(record){
                 this.$axios.get("spike_orders/check/"+record.id,{withCredentials: true})
                     .then((response) => {
                         //console.log(response);
@@ -65,7 +65,7 @@
                     title: '您即将秒杀商品： '+record.name,
                     content: '此操作将扣除您 '+record.price+' 个金币是否继续？',
                     onOk() {
-                        if (me.$store.state.user.coin > record.price){
+                        if (me.$store.state.user.coin >= record.price){
                             me.doSpike(record)
                         } else {
                             me.showWrongMsg("没有足够金币")
@@ -100,8 +100,10 @@
                             record.loading = false;
                         });
                 }
+            },*/
+            toDetail(record){
+                this.$router.push({ name: 'spikes.detail', params: { id: record.id }})
             },
-
             handleTableChange (pagination, filters, sorter) {
                 //console.log(pagination);
                 //console.log(filters);
@@ -143,24 +145,24 @@
                         item.now = this.$dateFormat(now);
                         item.startAt = this.$dateFormat(item.startAt);
                         item.endAt = this.$dateFormat(item.endAt);
-                        let remainStamp = item.endAt - item.now;
-                        if (remainStamp < 0){
-                            item.remain = "已结束";
-                        }else{
-                            let beforeStamp = item.startAt - item.now;
-                            if (beforeStamp > 0){
-                                item.remain = "距离开始还有："+this.$convertTimestampToString(beforeStamp);
-                            }else{
-                                item.remain = this.$convertTimestampToString(remainStamp);
-                            }
-
-                        }
+                        // let remainStamp = item.endAt - item.now;
+                        // if (remainStamp < 0){
+                        //     item.remain = "已结束";
+                        // }else{
+                        //     let beforeStamp = item.startAt - item.now;
+                        //     if (beforeStamp > 0){
+                        //         item.remain = "距离开始还有："+this.$convertTimestampToString(beforeStamp);
+                        //     }else{
+                        //         item.remain = this.$convertTimestampToString(remainStamp);
+                        //     }
+                        //
+                        // }
                         item.loading = false;
                     }
                     this.data = list;
                     this.pagination = pagination;
                 }).catch(function (e) {
-                    console.log(e)
+                    // console.log(e)
                 });
             },
             showWrongMsg(msg){
